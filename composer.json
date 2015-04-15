@@ -1,0 +1,25 @@
+{
+    "name": "blackboxcode/pando-base-bundle",
+    "description": "Pando BaseBundle",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Black Box Code",
+            "email": "contact@blackboxcode.com"
+        }
+    ],
+    "keywords": ["pando base bundle"],
+    "license": ["LGPL-3.0"],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {"BlackBoxCode\\Pando\\Bundle\\BaseBundle\\": ""}
+    },
+    "repositories": [{
+    }],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "develop"
+        }
+    }
+}
