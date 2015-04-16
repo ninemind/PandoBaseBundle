@@ -1,7 +1,7 @@
 <?php
 namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
 
-interface IsTypeInterface extends HasIdInterface
+interface TypeInterface extends BaseInterface
 {
     /**
      * @param string $name

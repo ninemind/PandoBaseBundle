@@ -3,9 +3,9 @@ namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait IsTypeTrait
+trait TypeTrait
 {
-    use HasIdTrait;
+    use BaseTrait;
 
     /**
      * @var string
