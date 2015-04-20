@@ -1,7 +1,9 @@
 <?php
 namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
 
-interface TypeInterface extends BaseInterface
+use Doctrine\ORM\Mapping as ORM;
+
+interface TypeInterface extends IdInterface
 {
     /**
      * @param string $name

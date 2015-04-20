@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait TypeTrait
 {
-    use BaseTrait;
+    use IdTrait;
 
     /**
      * @var string

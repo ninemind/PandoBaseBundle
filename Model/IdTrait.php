@@ -4,7 +4,7 @@ namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-trait BaseTrait
+trait IdTrait
 {
     /**
      * @var string
@@ -21,12 +21,5 @@ trait BaseTrait
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param $propertyName
-     */
-    private function instantiateArrayCollection($propertyName) {
-        $this->$propertyName = new ArrayCollection();
     }
 }

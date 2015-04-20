@@ -1,7 +1,7 @@
 <?php
 namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
 
-interface BaseInterface
+interface IdInterface
 {
     /**
      * @return string
