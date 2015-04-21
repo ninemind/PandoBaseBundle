@@ -11,6 +11,7 @@
     "keywords": ["pando base bundle"],
     "license": ["LGPL-3.0"],
     "require": {
+        "stof/doctrine-extensions-bundle": "1.2.*@dev"
     },
     "autoload": {
         "psr-4": {"BlackBoxCode\\Pando\\Bundle\\BaseBundle\\": ""}
