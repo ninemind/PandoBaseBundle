@@ -17,6 +17,9 @@ class Configuration implements ConfigurationInterface
      */
     private $entityNamespace;
 
+    /**
+     * @param string $entityNamespace
+     */
     public function __construct($entityNamespace)
     {
         $this->entityNamespace = $entityNamespace;
