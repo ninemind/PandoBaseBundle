@@ -23,8 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->variableNode('entity_namespace')
-                    ->isRequired()
-                    ->cannotBeEmpty()
+                    ->defaultValue('%pando_entity.namespace%')
                 ->end()
             ->end()
         ;
