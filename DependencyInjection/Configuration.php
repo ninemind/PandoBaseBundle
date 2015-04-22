@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->variableNode('entity_namespace')
                     ->defaultValue($this->entityNamespace)
+                    ->cannotBeEmpty()
                 ->end()
             ->end()
         ;
