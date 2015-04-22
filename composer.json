@@ -20,11 +20,5 @@
     },
     "autoload": {
         "psr-4": {"BlackBoxCode\\Pando\\Bundle\\BaseBundle\\": ""}
-    },
-    "extra": {
-        "incenteev-parameters": {
-            "file": "config/config.yml",
-            "dist-file": "config/parameters.dist.yml"
-        }
     }
 }

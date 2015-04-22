@@ -22,7 +22,11 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('entity_namespace')
+                ->variableNode('entity_namespace')
+                    ->defaultValue('AppBundle')
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
             ->end()
         ;
 
