@@ -13,6 +13,16 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * @var string
+     */
+    private $entityNamespace;
+
+    public function __construct($entityNamespace)
+    {
+        $this->entityNamespace = $entityNamespace;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
@@ -23,7 +33,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->variableNode('entity_namespace')
-                    ->defaultValue('%pando_entity.namespace%')
+                    ->defaultValue($this->entityNamespace)
                 ->end()
             ->end()
         ;
