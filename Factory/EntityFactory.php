@@ -9,7 +9,7 @@ class EntityFactory
     private $entityNamespace;
 
     /**
-     * @param $entityNamespace
+     * @param string $entityNamespace
      */
     public function __construct($entityNamespace)
     {
