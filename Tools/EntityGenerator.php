@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
 <classAnnotations>
  */
-<className><implements>
+class <className><implements>
 {
 <traits>
 }';

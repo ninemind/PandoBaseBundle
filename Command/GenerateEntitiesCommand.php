@@ -20,9 +20,10 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $namespace = $container->getParameter('pando_entity.namespace');
 
-        $output->writeln(sprintf('Generating entities with namespace: %s ...', $namespace));
+        $kernel = $this->getContainer()->get('kernel');
+        $output->writeln(sprintf('Generating entities for the <info>%s</info> environment with the %s namespace', $kernel->getEnvironment(), $namespace));
 
-        $outputDir = 'app/cache/pando';
+        $outputDir = $container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . 'blackboxcode' . DIRECTORY_SEPARATOR . 'pando';
 
         $entityGenerator = new EntityGenerator();
         foreach ($this->generateEntityMap() as $entityName => $classTypes) {
