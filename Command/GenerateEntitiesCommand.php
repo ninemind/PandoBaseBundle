@@ -20,10 +20,7 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $namespace = $container->getParameter('pando_entity.namespace');
 
-        $kernel = $this->getContainer()->get('kernel');
-        $output->writeln(sprintf('Generating entities for the <info>%s</info> environment with the %s namespace', $kernel->getEnvironment(), $namespace));
-
-        $outputDir = $container->getParameter('kernel.cache_dir') . DIRECTORY_SEPARATOR . 'blackboxcode' . DIRECTORY_SEPARATOR . 'pando';
+        $outputDir = 'src';
 
         $entityGenerator = new EntityGenerator();
         foreach ($this->generateEntityMap() as $entityName => $classTypes) {
@@ -36,7 +33,7 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
             foreach ($classTypes as $classType => $classes) {
                 $method = 'add' . $classType;
                 foreach ($classes as $class) {
-                    $model->$method($class);
+                    $model->$method('\\' . $class);
                 }
             }
 
@@ -48,12 +45,13 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
             }
         }
 
-        $output->writeln(sprintf('Finished! Entities can be found in: %s', $outputDir));
+        $output->writeln('Finished!');
     }
 
     private function generateEntityMap()
     {
         $map = array();
+        $interfacesToRemove = array();
 
         $classMap = ClassMapGenerator::createMap('vendor/blackboxcode');
         foreach ($classMap as $ns => $file) {
@@ -64,7 +62,24 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
                 if (substr($className, -5) == 'Trait') {
                     $map[substr($className, 0, -5)]['Trait'][] = $ns;
                 } else if (substr($className, -9) == 'Interface') {
+
+                    $class = new \ReflectionClass($ns);
+                    foreach ($class->getInterfaceNames() as $interface) {
+                        $interfaceParts = explode('\\', $interface);
+                        if (array_pop($interfaceParts) === $className) {
+                            $interfacesToRemove[$interface] = null;
+                        }
+                    }
+
                     $map[substr($className, 0, -9)]['Interface'][] = $ns;
+                }
+            }
+        }
+
+        foreach ($map as $entity => $dependencies) {
+            foreach (array_keys($interfacesToRemove) as $remove) {
+                if ($key = array_search($remove, $dependencies['Interface'])) {
+                    unset($map[$entity]['Interface'][$key]);
                 }
             }
         }
