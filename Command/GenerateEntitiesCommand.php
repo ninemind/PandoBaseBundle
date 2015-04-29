@@ -53,7 +53,10 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
         $map = array();
         $interfacesToRemove = array();
 
-        $classMap = ClassMapGenerator::createMap('vendor/blackboxcode');
+        $classMap = array_merge(
+            ClassMapGenerator::createMap('vendor/blackboxcode'),
+            ClassMapGenerator::createMap('src')
+        );
         foreach ($classMap as $ns => $file) {
             $parts = explode('\\', $ns);
 
