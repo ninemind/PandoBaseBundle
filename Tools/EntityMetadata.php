@@ -1,11 +1,8 @@
 <?php
 namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tools;
 
-class EntityModel
+class EntityMetadata
 {
-    /** @var string */
-    protected $namespace;
-
     /** @var string */
     protected $className;
 
@@ -14,25 +11,6 @@ class EntityModel
 
     /** @var array */
     protected $traits = array();
-
-    /**
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
-    /**
-     * @param string $namespace
-     * @return $this
-     */
-    public function setNamespace($namespace)
-    {
-        $this->namespace = $namespace;
-
-        return $this;
-    }
 
     /**
      * @return string

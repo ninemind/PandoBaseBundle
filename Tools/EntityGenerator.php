@@ -2,6 +2,7 @@
 namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tools;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class EntityGenerator
 {
@@ -26,14 +27,25 @@ class <className><implements>
     /** @var string */
     protected static $extension = '.php';
 
+    /** @var ContainerInterface */
+    private $container;
+
 
     /**
-     * Generates a Doctrine 2 entity class from the given EntityModel instance
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Generates a Doctrine 2 entity class from the given EntityMetadata instance
      *
-     * @param EntityModel $model
+     * @param EntityMetadata $meta
      * @return string
      */
-    public function generateEntityClass(EntityModel $model)
+    public function generateEntityClass(EntityMetadata $meta)
     {
         $placeholders = array(
             '<namespace>',
@@ -44,11 +56,11 @@ class <className><implements>
         );
 
         $replacements = array(
-            $model->getNamespace(),
-            $this->generateClassAnnotations($model->getTraits()),
-            $model->getClassName(),
-            $this->generateImplements($model->getInterfaces()),
-            $this->generateTraitStatements($model->getTraits())
+            $this->container->getParameter('pando_entity.namespace'),
+            $this->generateClassAnnotations($meta->getTraits()),
+            $meta->getClassName(),
+            $this->generateImplements($meta->getInterfaces()),
+            $this->generateTraitStatements($meta->getTraits())
         );
 
         $code = str_replace($placeholders, $replacements, self::$template);
@@ -61,9 +73,13 @@ class <className><implements>
      */
     protected function generateImplements($interfaces)
     {
-        return ' implements ' . implode(', ', $interfaces);
+        return count($interfaces) ? ' implements ' . implode(', ', $interfaces) : '';
     }
 
+    /**
+     * @param array $traits
+     * @return string
+     */
     protected function generateTraitStatements($traits)
     {
         $traitStatements = '';
@@ -74,6 +90,10 @@ class <className><implements>
         return substr($traitStatements, 0, -1);
     }
 
+    /**
+     * @param array $traits
+     * @return string
+     */
     protected function generateClassAnnotations($traits)
     {
         $annotationArray = $this->buildClassAnnotationArray($traits);
@@ -82,44 +102,64 @@ class <className><implements>
 
     protected function buildClassAnnotationArray($traits)
     {
-        $annotationArray = array();
+        $annotations = array();
 
         $reader = new AnnotationReader();
         foreach ($traits as $trait) {
-            $annotations = $reader->getClassAnnotations(new \ReflectionClass($trait));
-
-            foreach ($annotations as $annotation) {
-                $namespace = explode('\\', get_class($annotation));
-                $root = array_pop($namespace);
-
-                switch ($root) {
-                    case 'Table':
-                        if (!is_null($annotation->indexes)) {
-                            foreach ($annotation->indexes as $index) {
-                                $annotationArray['@ORM\\' . $root]['indexes'][] = '@ORM\Index(columns={"' . implode('", "', $index->columns) . '"})';
-                            }
-                        }
-
-                        if (!is_null($annotation->uniqueConstraints)) {
-                            foreach ($annotation->uniqueConstraints as $uniqueConstraint) {
-                                $annotationArray['@ORM\\' . $root]['uniqueConstraints'][] = '@ORM\UniqueConstraint(columns={"' . implode('", "', $uniqueConstraint->columns) . '"})';
-                            }
-                        }
-                        break;
-
-                    default:
-                        $annotationArray['@ORM\\' . $root] = null;
-                }
-            }
+            $annotations = array_merge(
+                $annotations,
+                $this->parseTraitAnnotations(
+                    $reader->getClassAnnotations(new \ReflectionClass($trait))
+                )
+            );
         }
 
-        if (!array_key_exists('@ORM\\Entity', $annotationArray)) {
+        if (!array_key_exists('@ORM\\Entity', $annotations)) {
             throw new \InvalidArgumentException('Not an entity');
+        }
+
+        return $annotations;
+    }
+
+    /**
+     * @param array $annotations
+     * @return array
+     */
+    private function parseTraitAnnotations($annotations)
+    {
+        $annotationArray = array();
+
+        foreach ($annotations as $annotation) {
+            $namespace = explode('\\', get_class($annotation));
+            $root = array_pop($namespace);
+
+            switch ($root) {
+                case 'Table':
+                    if (!is_null($annotation->indexes)) {
+                        foreach ($annotation->indexes as $index) {
+                            $annotationArray['@ORM\\' . $root]['indexes'][] = '@ORM\Index(columns={"' . implode('", "', $index->columns) . '"})';
+                        }
+                    }
+
+                    if (!is_null($annotation->uniqueConstraints)) {
+                        foreach ($annotation->uniqueConstraints as $uniqueConstraint) {
+                            $annotationArray['@ORM\\' . $root]['uniqueConstraints'][] = '@ORM\UniqueConstraint(columns={"' . implode('", "', $uniqueConstraint->columns) . '"})';
+                        }
+                    }
+                    break;
+
+                default:
+                    $annotationArray['@ORM\\' . $root] = null;
+            }
         }
 
         return $annotationArray;
     }
 
+    /**
+     * @param array $annotationArray
+     * @return string
+     */
     protected function buildClassAnnotationString($annotationArray)
     {
         $annotationString = "";
@@ -138,9 +178,13 @@ class <className><implements>
         return substr($annotationString, 0, -1);
     }
 
-    public function writeEntityToFile(EntityModel $model, $outputDirectory)
+    /**
+     * @param EntityMetadata $meta
+     * @param string $outputDirectory
+     */
+    public function writeEntityToFile(EntityMetadata $meta, $outputDirectory)
     {
-        $path = $outputDirectory . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $model->getNamespace()) . DIRECTORY_SEPARATOR . $model->getClassName() . self::$extension;
+        $path = $outputDirectory . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->container->getParameter('pando_entity.namespace')) . DIRECTORY_SEPARATOR . $meta->getClassName() . self::$extension;
 
         $dir = dirname($path);
         if (!is_dir($dir)) {
@@ -151,6 +195,6 @@ class <className><implements>
             unlink($path);
         }
 
-        file_put_contents($path, $this->generateEntityClass($model));
+        file_put_contents($path, $this->generateEntityClass($meta));
     }
 }
