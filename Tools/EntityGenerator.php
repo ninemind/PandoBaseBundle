@@ -27,16 +27,16 @@ class <className><implements>
     /** @var string */
     protected static $extension = '.php';
 
-    /** @var ContainerInterface */
-    private $container;
+    /** @var string */
+    private $namespace;
 
 
     /**
-     * @param ContainerInterface $container
+     * @param string $namespace
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($namespace)
     {
-        $this->container = $container;
+        $this->namespace = $namespace;
     }
 
     /**
@@ -56,7 +56,7 @@ class <className><implements>
         );
 
         $replacements = array(
-            $this->container->getParameter('pando_entity.namespace'),
+            $this->namespace,
             $this->generateClassAnnotations($meta->getTraits()),
             $meta->getClassName(),
             $this->generateImplements($meta->getInterfaces()),
@@ -184,7 +184,7 @@ class <className><implements>
      */
     public function writeEntityToFile(EntityMetadata $meta, $outputDirectory)
     {
-        $path = $outputDirectory . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->container->getParameter('pando_entity.namespace')) . DIRECTORY_SEPARATOR . $meta->getClassName() . self::$extension;
+        $path = $outputDirectory . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->namespace) . DIRECTORY_SEPARATOR . $meta->getClassName() . self::$extension;
 
         $dir = dirname($path);
         if (!is_dir($dir)) {
@@ -196,5 +196,25 @@ class <className><implements>
         }
 
         file_put_contents($path, $this->generateEntityClass($meta));
+    }
+
+    /**
+     * @param string $entityName
+     * @param array $dependencies
+     * @return EntityMetadata
+     */
+    public function createEntityMetadata($entityName, $dependencies)
+    {
+        $meta = new EntityMetadata();
+        $meta->setClassName($entityName);
+
+        foreach ($dependencies as $classType => $classes) {
+            $method = 'add' . $classType;
+            foreach ($classes as $class) {
+                $meta->$method('\\' . $class);
+            }
+        }
+
+        return $meta;
     }
 }

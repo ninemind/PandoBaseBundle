@@ -5,25 +5,34 @@ use BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityGenerator;
 use BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityMetadata;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateEntitiesCommand extends ContainerAwareCommand
 {
     /** @var string */
-    protected static $outputDir = 'src';
+    private $outputDir = 'src';
 
-    protected function configure()
+    public function configure()
     {
-        $this->setName('pando:generate:entities');
+        $this
+            ->setName('pando:generate:entities')
+            ->setDescription('Generates pando entities from traits and interfaces in Bundle/Model directories.')
+            ->addArgument('outputDir', InputArgument::OPTIONAL, 'Where do you want to save the generated entities?', $this->outputDir)
+        ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityGenerator = new EntityGenerator($this->getContainer());
-        foreach ($this->generateEntityMap() as $entityName => $classMap) {
+        $outputDir = $input->getArgument('outputDir');
+        $entityGenerator = $this->getEntityGenerator();
+
+        $classMap = $this->generateClassMap();
+        foreach ($this->parseClassMap($classMap) as $entityName => $dependencies) {
             try {
-                $entityGenerator->writeEntityToFile($this->createEntityMetadata($entityName, $classMap), self::$outputDir);
+                $meta = $entityGenerator->createEntityMetadata($entityName, $dependencies);
+                $entityGenerator->writeEntityToFile($meta, $outputDir);
                 $output->writeln('Generated entity: ' . $entityName);
             } catch (\InvalidArgumentException $e) {
                 continue;
@@ -34,37 +43,32 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param string $entityName
-     * @param array $classMap
-     * @return EntityMetadata
+     * @return EntityGenerator
      */
-    protected function createEntityMetadata($entityName, $classMap)
+    public function getEntityGenerator()
     {
-        $meta = new EntityMetadata();
-        $meta->setClassName($entityName);
-
-        foreach ($classMap as $classType => $classes) {
-            $method = 'add' . $classType;
-            foreach ($classes as $class) {
-                $meta->$method('\\' . $class);
-            }
-        }
-
-        return $meta;
+        return $this->getContainer()->get('pando_base_bundle.entity_generator');
     }
 
     /**
      * @return array
      */
-    private function generateEntityMap()
+    public function generateClassMap()
     {
-        $classMap = array_merge(
+        return array_keys(array_merge(
             ClassMapGenerator::createMap('vendor/blackboxcode'),
             ClassMapGenerator::createMap('src')
-        );
+        ));
+    }
 
+    /**
+     * @param array
+     * @return array
+     */
+    private function parseClassMap($classMap)
+    {
         $map = array();
-        foreach ($classMap as $ns => $file) {
+        foreach ($classMap as $ns) {
             $parts = explode('\\', $ns);
 
             $className = array_pop($parts);
@@ -90,9 +94,11 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
         $removals = array();
 
         foreach($map as $entityName => $dependencies) {
-            foreach($dependencies['Interface'] as $interface) {
-                $r = new \ReflectionClass($interface);
-                $removals = array_merge($removals, $r->getInterfaceNames());
+            if (array_key_exists('Interface', $dependencies)) {
+                foreach($dependencies['Interface'] as $interface) {
+                    $r = new \ReflectionClass($interface);
+                    $removals = array_merge($removals, $r->getInterfaceNames());
+                }
             }
         }
 
