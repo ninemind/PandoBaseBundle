@@ -92,6 +92,6 @@ class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
             )
         ;
 
-        $this->commandTester->execute(array('outputDir' => 'src'));
+        $this->commandTester->execute(array('outputDir' => $outputDir));
     }
 }
