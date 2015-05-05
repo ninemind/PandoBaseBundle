@@ -7,10 +7,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EntityGenerator
 {
     /** @var string */
-    protected static $spaces = '    ';
+    private static $spaces = '    ';
 
     /** @var string */
-    protected static $template =
+    private static $template =
 '<?php
 namespace <namespace>;
 
