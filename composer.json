@@ -16,6 +16,7 @@
     "keywords": ["pando base bundle"],
     "license": ["LGPL-3.0"],
     "require": {
+        "phpunit/phpunit": "4.6.6",
         "jms/di-extra-bundle": "1.5.0",
         "stof/doctrine-extensions-bundle": "1.1.0"
     },
