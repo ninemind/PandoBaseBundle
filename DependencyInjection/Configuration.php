@@ -12,17 +12,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * @var string
-     */
-    private $entityNamespace;
+    /** @var array */
+    private $entity;
 
     /**
-     * @param string $entityNamespace
+     * @param array $entity
      */
-    public function __construct($entityNamespace)
+    public function __construct(array $entity)
     {
-        $this->entityNamespace = $entityNamespace;
+        $this->entity = $entity;
     }
 
     /**
@@ -36,7 +34,10 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->variableNode('entity_namespace')
-                    ->defaultValue($this->entityNamespace)
+                    ->defaultValue($this->entity['base_dir'])
+                ->end()
+                ->variableNode('entity_namespace')
+                    ->defaultValue($this->entity['namespace'])
                 ->end()
             ->end()
         ;

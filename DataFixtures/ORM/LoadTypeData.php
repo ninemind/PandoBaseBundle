@@ -28,7 +28,8 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $classMap = ClassMapGenerator::createMap('src' . DIRECTORY_SEPARATOR . $this->container->getParameter('pando_entity.namespace'));
+        $entityParams = $this->container->getParameter('pando_entity');
+        $classMap = ClassMapGenerator::createMap($entityParams['base_dir'] . DIRECTORY_SEPARATOR . $entityParams['namespace']);
 
         foreach ($classMap as $ns => $file) {
             if (substr($ns, -4) === 'Type') {

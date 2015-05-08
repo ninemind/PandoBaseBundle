@@ -5,4 +5,4 @@ services:
     pando_base_bundle.entity_generator:
         class: "%pando_base_bundle.tool.entity_generator.class%"
         arguments:
-            - %pando_entity.namespace%
+            - %pando_entity%

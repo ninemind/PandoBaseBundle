@@ -11,28 +11,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateEntitiesCommand extends ContainerAwareCommand
 {
-    /** @var string */
-    private $outputDir = 'src';
-
     public function configure()
     {
         $this
             ->setName('pando:generate:entities')
             ->setDescription('Generates pando entities from traits and interfaces in Bundle/Model directories.')
-            ->addArgument('outputDir', InputArgument::OPTIONAL, 'Where do you want to save the generated entities?', $this->outputDir)
         ;
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $outputDir = $input->getArgument('outputDir');
         $entityGenerator = $this->getEntityGenerator();
 
         $classMap = $this->generateClassMap();
         foreach ($this->parseClassMap($classMap) as $entityName => $dependencies) {
             try {
                 $meta = $entityGenerator->createEntityMetadata($entityName, $dependencies);
-                $entityGenerator->writeEntityToFile($meta, $outputDir);
+                $entityGenerator->writeEntityToFile($meta);
                 $output->writeln('Generated entity: ' . $entityName);
             } catch (\InvalidArgumentException $e) {
                 continue;

@@ -27,16 +27,16 @@ class <className><implements>
     /** @var string */
     protected static $extension = '.php';
 
-    /** @var string */
-    private $namespace;
+    /** @var array */
+    private $entityParams;
 
 
     /**
-     * @param string $namespace
+     * @param array $entityParams
      */
-    public function __construct($namespace)
+    public function __construct(array $entityParams)
     {
-        $this->namespace = $namespace;
+        $this->entityParams = $entityParams;
     }
 
     /**
@@ -56,7 +56,7 @@ class <className><implements>
         );
 
         $replacements = array(
-            $this->namespace,
+            $this->entityParams['namespace'],
             $this->generateClassAnnotations($meta->getTraits()),
             $meta->getClassName(),
             $this->generateImplements($meta->getInterfaces()),
@@ -180,11 +180,10 @@ class <className><implements>
 
     /**
      * @param EntityMetadata $meta
-     * @param string $outputDirectory
      */
-    public function writeEntityToFile(EntityMetadata $meta, $outputDirectory)
+    public function writeEntityToFile(EntityMetadata $meta)
     {
-        $path = $outputDirectory . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->namespace) . DIRECTORY_SEPARATOR . $meta->getClassName() . self::$extension;
+        $path = $this->entityParams['base_dir'] . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->entityParams['namespace']) . DIRECTORY_SEPARATOR . $meta->getClassName() . self::$extension;
 
         $dir = dirname($path);
         if (!is_dir($dir)) {
