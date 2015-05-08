@@ -85,13 +85,13 @@ class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
         $mEntityGenerator
             ->expects($this->exactly(2))
             ->method('writeEntityToFile')
-            ->with($this->isInstanceOf(get_class(new EntityMetadata())), $outputDir)
+            ->with($this->isInstanceOf(get_class(new EntityMetadata())))
             ->willReturnOnConsecutiveCalls(
                 $this->throwException(new \InvalidArgumentException()),
                 null
             )
         ;
 
-        $this->commandTester->execute(array('outputDir' => $outputDir));
+        $this->commandTester->execute([]);
     }
 }

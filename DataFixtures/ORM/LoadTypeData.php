@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\DataFixtures;
+namespace BlackBoxCode\Pando\Bundle\BaseBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -23,15 +23,18 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
         $this->container = $container;
     }
 
+    public function getEntityList()
+    {
+        $entityParams = $this->container->getParameter('pando_entity');
+        return array_keys(ClassMapGenerator::createMap($entityParams['base_dir'] . DIRECTORY_SEPARATOR . $entityParams['namespace']));
+    }
+
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
-        $entityParams = $this->container->getParameter('pando_entity');
-        $classMap = ClassMapGenerator::createMap($entityParams['base_dir'] . DIRECTORY_SEPARATOR . $entityParams['namespace']);
-
-        foreach ($classMap as $ns => $file) {
+        foreach ($this->getEntityList() as $ns) {
             if (substr($ns, -4) === 'Type') {
                 $r = new \ReflectionClass($ns);
                 foreach ($r->getConstants() as $constant) {
