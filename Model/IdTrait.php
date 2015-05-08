@@ -10,7 +10,7 @@ trait IdTrait
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     protected $id;
 
