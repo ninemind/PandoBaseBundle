@@ -29,7 +29,7 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mLoadTypeData = $this->getMock(get_class(new LoadTypeData()), ['getEntityList']);
+        $this->mLoadTypeData = $this->getMock(get_class(new LoadTypeData()), ['getEntityList', 'createTypeEntity']);
         $this->mContainer = $this->getMock('Symfony\Component\DependencyInjection\Container');
         $this->mObjectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
@@ -41,6 +41,8 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
      */
     public function load()
     {
+        $mOneType = $this->getMock('BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType', ['setName']);
+
         $this->mLoadTypeData
             ->expects($this->once())
             ->method('getEntityList')
@@ -48,6 +50,18 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
                 'BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType',
                 'BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\One'
             ])
+        ;
+
+        $this->mLoadTypeData
+            ->expects($this->exactly(2))
+            ->method('createTypeEntity')
+            ->with('BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType')
+            ->willReturn($mOneType)
+        ;
+
+        $mOneType
+            ->expects($this->exactly(2))
+            ->method('setName')
         ;
 
         $this->mObjectManager

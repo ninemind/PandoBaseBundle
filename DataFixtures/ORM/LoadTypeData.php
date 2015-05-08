@@ -29,6 +29,11 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
         return array_keys(ClassMapGenerator::createMap($entityParams['base_dir'] . DIRECTORY_SEPARATOR . $entityParams['namespace']));
     }
 
+    public function createTypeEntity($namespace)
+    {
+        return new $namespace;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -38,7 +43,7 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
             if (substr($ns, -4) === 'Type') {
                 $r = new \ReflectionClass($ns);
                 foreach ($r->getConstants() as $constant) {
-                    $type = new $ns;
+                    $type = $this->createTypeEntity($ns);
                     $type->setName($constant);
                     $manager->persist($type);
                 }
