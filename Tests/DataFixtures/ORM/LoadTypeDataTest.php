@@ -62,6 +62,7 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
         $mOneType
             ->expects($this->exactly(2))
             ->method('setName')
+            ->withConsecutive(['A'], ['B'])
         ;
 
         $this->mObjectManager
