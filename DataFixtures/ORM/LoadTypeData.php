@@ -14,6 +14,7 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
      */
     private $container;
 
+
     /**
      * {@inheritDoc}
      */
@@ -21,7 +22,6 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
     {
         $this->container = $container;
     }
-
 
     /**
      * {@inheritDoc}
