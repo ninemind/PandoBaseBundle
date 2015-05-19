@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tools;
+namespace BlackBoxCode\Pando\BaseBundle\Tools;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;

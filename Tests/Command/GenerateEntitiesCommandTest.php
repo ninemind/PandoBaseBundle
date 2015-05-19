@@ -1,8 +1,8 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tests\Command;
+namespace BlackBoxCode\Pando\BaseBundle\Tests\Command;
 
-use BlackBoxCode\Pando\Bundle\BaseBundle\Command\GenerateEntitiesCommand;
-use BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityMetadata;
+use BlackBoxCode\Pando\BaseBundle\Command\GenerateEntitiesCommand;
+use BlackBoxCode\Pando\BaseBundle\Tools\EntityMetadata;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
@@ -16,7 +16,7 @@ class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mGenerateEntitiesCommand = $this
-            ->getMockBuilder('BlackBoxCode\Pando\Bundle\BaseBundle\Command\GenerateEntitiesCommand')
+            ->getMockBuilder('BlackBoxCode\Pando\BaseBundle\Command\GenerateEntitiesCommand')
             ->setMethods(['generateClassMap', 'getEntityGenerator'])
             ->getMock()
         ;
@@ -34,16 +34,16 @@ class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
         $userMeta = new EntityMetadata();
         $userMeta
             ->setClassName('User')
-            ->addInterface('BlackBoxCode\Pando\Bundle\UserBundle\Model\UserInterface')
+            ->addInterface('BlackBoxCode\Pando\UserBundle\Model\UserInterface')
             ->addTrait('AppBundle\Model\UserTrait')
-            ->addTrait('BlackBoxCode\Pando\Bundle\UserBundle\Model\UserTrait')
+            ->addTrait('BlackBoxCode\Pando\UserBundle\Model\UserTrait')
         ;
 
         $idMeta = new EntityMetadata();
         $idMeta
             ->setClassName('Id')
-            ->addInterface('BlackBoxCode\Pando\Bundle\BaseBundle\Model\IdInterface')
-            ->addTrait('BlackBoxCode\Pando\Bundle\BaseBundle\Model\IdTrait')
+            ->addInterface('BlackBoxCode\Pando\BaseBundle\Model\IdInterface')
+            ->addTrait('BlackBoxCode\Pando\BaseBundle\Model\IdTrait')
         ;
 
         $classMap = array_merge(
@@ -54,7 +54,7 @@ class GenerateEntitiesCommandTest extends \PHPUnit_Framework_TestCase
         );
 
         $mEntityGenerator = $this
-            ->getMockBuilder('BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityGenerator')
+            ->getMockBuilder('BlackBoxCode\Pando\BaseBundle\Tools\EntityGenerator')
             ->disableOriginalConstructor()
             ->getMock()
         ;

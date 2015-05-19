@@ -22,6 +22,6 @@
         "stof/doctrine-extensions-bundle": "1.1.0"
     },
     "autoload": {
-        "psr-4": {"BlackBoxCode\\Pando\\Bundle\\BaseBundle\\": ""}
+        "psr-4": {"BlackBoxCode\\Pando\\BaseBundle\\": ""}
     }
 }

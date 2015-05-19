@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Exception;
+namespace BlackBoxCode\Pando\BaseBundle\Exception;
 
 class BaseException extends \RuntimeException
 {

@@ -1,5 +1,5 @@
 parameters:
-    pando_base_bundle.tool.entity_generator.class: BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityGenerator
+    pando_base_bundle.tool.entity_generator.class: BlackBoxCode\Pando\BaseBundle\Tools\EntityGenerator
 
 services:
     pando_base_bundle.entity_generator:

@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tools;
+namespace BlackBoxCode\Pando\BaseBundle\Tools;
 
 class EntityMetadata
 {

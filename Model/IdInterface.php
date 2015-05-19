@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Model;
+namespace BlackBoxCode\Pando\BaseBundle\Model;
 
 interface IdInterface
 {

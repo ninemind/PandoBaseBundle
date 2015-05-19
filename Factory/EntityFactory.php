@@ -1,5 +1,5 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Factory;
+namespace BlackBoxCode\Pando\BaseBundle\Factory;
 
 class EntityFactory
 {

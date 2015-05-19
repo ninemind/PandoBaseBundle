@@ -1,7 +1,7 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM;
+namespace BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM;
 
-use BlackBoxCode\Pando\Bundle\BaseBundle\DataFixtures\ORM\LoadTypeData;
+use BlackBoxCode\Pando\BaseBundle\DataFixtures\ORM\LoadTypeData;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -41,21 +41,21 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
      */
     public function load()
     {
-        $mOneType = $this->getMock('BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType', ['setName']);
+        $mOneType = $this->getMock('BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM\OneType', ['setName']);
 
         $this->mLoadTypeData
             ->expects($this->once())
             ->method('getEntityList')
             ->willReturn([
-                'BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType',
-                'BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\One'
+                'BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM\OneType',
+                'BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM\One'
             ])
         ;
 
         $this->mLoadTypeData
             ->expects($this->exactly(2))
             ->method('createTypeEntity')
-            ->with('BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType')
+            ->with('BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM\OneType')
             ->willReturn($mOneType)
         ;
 
@@ -68,7 +68,7 @@ class LoadTypeDataTest extends \PHPUnit_Framework_TestCase
         $this->mObjectManager
             ->expects($this->exactly(2))
             ->method('persist')
-            ->with($this->isInstanceOf('BlackBoxCode\Pando\Bundle\BaseBundle\Tests\DataFixures\ORM\OneType'))
+            ->with($this->isInstanceOf('BlackBoxCode\Pando\BaseBundle\Tests\DataFixures\ORM\OneType'))
         ;
 
         $this->mObjectManager

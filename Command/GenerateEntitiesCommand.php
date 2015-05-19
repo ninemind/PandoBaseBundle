@@ -1,8 +1,8 @@
 <?php
-namespace BlackBoxCode\Pando\Bundle\BaseBundle\Command;
+namespace BlackBoxCode\Pando\BaseBundle\Command;
 
-use BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityGenerator;
-use BlackBoxCode\Pando\Bundle\BaseBundle\Tools\EntityMetadata;
+use BlackBoxCode\Pando\BaseBundle\Tools\EntityGenerator;
+use BlackBoxCode\Pando\BaseBundle\Tools\EntityMetadata;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Symfony\Component\Console\Input\InputArgument;
