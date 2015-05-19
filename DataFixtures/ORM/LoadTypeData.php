@@ -26,8 +26,8 @@ class LoadTypeData implements FixtureInterface, ContainerAwareInterface
     public function getEntityList()
     {
         $baseDir = $this->container->getParameter('pando.entity.base_dir');
-        $namespace = $this->container->getParameter('pando.entity.base_dir');
-        return array_keys(ClassMapGenerator::createMap($baseDir . DIRECTORY_SEPARATOR . $namespace));
+        $namespace = $this->container->getParameter('pando.entity.namespace');
+        return array_keys(ClassMapGenerator::createMap($baseDir . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $namespace)));
     }
 
     public function createTypeEntity($namespace)
