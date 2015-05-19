@@ -12,17 +12,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /** @var array */
-    private $entity;
-
-    /**
-     * @param array $entity
-     */
-    public function __construct(array $entity)
-    {
-        $this->entity = $entity;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -33,11 +22,11 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->variableNode('entity_namespace')
-                    ->defaultValue($this->entity['base_dir'])
-                ->end()
-                ->variableNode('entity_namespace')
-                    ->defaultValue($this->entity['namespace'])
+                ->arrayNode('entity')
+                    ->children()
+                        ->variableNode('base_dir')->end()
+                        ->variableNode('namespace')->end()
+                    ->end()
                 ->end()
             ->end()
         ;

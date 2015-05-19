@@ -5,4 +5,4 @@ services:
     pando_base_bundle.entity_factory:
         class: "%pando_base_bundle.factory.entity.class%"
         arguments:
-            - %pando_entity%
+            - %pando.entity.namespace%

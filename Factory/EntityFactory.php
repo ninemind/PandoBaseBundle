@@ -3,17 +3,15 @@ namespace BlackBoxCode\Pando\BaseBundle\Factory;
 
 class EntityFactory
 {
-    /**
-     * @var array
-     */
-    private $entityParams;
+    /** @var string */
+    private $namespace;
 
     /**
-     * @param array $entityParams
+     * @param string $namespace
      */
-    public function __construct(array $entityParams)
+    public function __construct($namespace)
     {
-        $this->entityParams = $entityParams;
+        $this->namespace = $namespace;
     }
 
     /**
@@ -24,7 +22,7 @@ class EntityFactory
      */
     public function create($entityName)
     {
-        $fullNamespace = '\\' . $this->entityParams['namespace'] . '\\' . $entityName;
+        $fullNamespace = '\\' . $this->namespace . '\\' . $entityName;
         return new $fullNamespace();
     }
 }
