@@ -60,7 +60,7 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
      * @param array
      * @return array
      */
-    private function parseClassMap($classMap)
+    private function parseClassMap(array $classMap)
     {
         $map = array();
         foreach ($classMap as $ns) {
@@ -84,7 +84,7 @@ class GenerateEntitiesCommand extends ContainerAwareCommand
      * @param array $map
      * @return array
      */
-    private function removeExtendedInterfaces($map)
+    private function removeExtendedInterfaces(array $map)
     {
         $removals = array();
 
